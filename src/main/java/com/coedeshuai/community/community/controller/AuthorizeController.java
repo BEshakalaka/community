@@ -2,6 +2,8 @@ package com.coedeshuai.community.community.controller;
 
 import com.coedeshuai.community.community.dto.AccessTokenDTO;
 import com.coedeshuai.community.community.dto.GithubUser;
+import com.coedeshuai.community.community.mapper.UserMapper;
+import com.coedeshuai.community.community.model.User;
 import com.coedeshuai.community.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * @author ：codeshuai
@@ -28,6 +31,8 @@ public class AuthorizeController {
     private String redirectUrl;
     @Value("${github.client.secret}")
     private String clientSecret;
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code")String code,
@@ -41,11 +46,18 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser user = githubProvider.getUser(accessToken);
-        if(user != null){
+        GithubUser githubUser = githubProvider.getUser(accessToken);
+        if(githubUser != null){
+            User user = new User();
+            user.setToken(UUID.randomUUID().toString());
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);
 //            登录成功，写入cookie和session
 //            将user对象放入session中
-            request.getSession().setAttribute("user",user);
+            request.getSession().setAttribute("githubUser",githubUser);
             return "redirect:/";
         }else{
 //            登录失败,请重新登陆

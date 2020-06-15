@@ -14,7 +14,7 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper {
 
 //   注册用户信息到数据库
-    @Insert("INSERT INTO USER (name,account_id,token,gmt_create,gmt_modified) VAlUES (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
+    @Insert("INSERT INTO USER (name,account_id,token,gmt_create,gmt_modified,avatar_url) VAlUES (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
     void insert(User user);
 //  根据token查询是否存在该用户
     @Select("select * from USER where token = #{token} limit 1")

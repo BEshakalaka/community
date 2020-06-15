@@ -23,7 +23,7 @@ public class IndexController {
     public String index(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
 //      先判断cookies为空，则直接放index.html
-        if(cookies ==null){
+        if(cookies == null){
             return "index";
         }
         for (Cookie cookie : cookies) {

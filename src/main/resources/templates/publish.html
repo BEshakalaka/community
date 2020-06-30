@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>发布 - codeshuai 社区</title>
+    <title th:text="${sectionName}" >发布 - codeshuai 社区</title>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
     <!--    引入jquery，此js，bootstrap必须用到  -->
     <script src="js/jquery-3.2.1.min.js" type="application/javascript"></script>
@@ -20,7 +20,7 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
+            <h2><span th:text="${sectionName}"></span></h2>
             <hr>
             <form action="/publish" method="post">
                 <!--title-->
